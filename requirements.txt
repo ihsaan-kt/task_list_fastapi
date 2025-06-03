@@ -4,3 +4,5 @@ PyJWT
 passlib
 bcrypt
 uvicorn[standard]
+pytest
+pytest-asyncio
