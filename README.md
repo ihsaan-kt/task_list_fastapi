@@ -1,4 +1,4 @@
-## Sample FastAPI implementation with JWT
+## Thank you for your time and consideration. This is a sample FastAPI implementation with JWT
 
 ## Deploying locally:
   ```
@@ -48,6 +48,3 @@ api.add_middleware(
 ![alt text](image.png)
 
 ![alt text](image-1.png)
-  
-
-## Thank you for your time and consideration. 
