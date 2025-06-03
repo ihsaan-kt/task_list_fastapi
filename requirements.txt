@@ -6,3 +6,5 @@ bcrypt
 uvicorn[standard]
 pytest
 pytest-asyncio
+pandas
+pandera
