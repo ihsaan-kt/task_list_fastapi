@@ -24,6 +24,30 @@
   cd /tests
   pytest 
   ```
+
+## Apitally for monitoring
+reference: https://apitally.io/blog/fastapi-monitoring-made-easy
+
+
+APItally is a simple Opentelemetry instrumentation platform to monitor API performance. Performance metrics and API calls will be passed onto the APItally dashboard after providing `client_id` in `main.py`:
+
+```
+...
+api = FastAPI()
+api.add_middleware(
+    ApitallyMiddleware,
+    client_id="client_id_given_in_apitally_account",
+
+...
+```
+
+
+
+![alt text](image-2.png)
+
+![alt text](image.png)
+
+![alt text](image-1.png)
   
 
-### Thank you for your time and consideration. 
+## Thank you for your time and consideration. 

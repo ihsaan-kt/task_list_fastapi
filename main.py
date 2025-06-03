@@ -9,9 +9,15 @@ import pandas as pd
 import pandera as pa
 from pandera.typing import Series
 
-from auth import User, Token, authenticate_user, create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
+from .auth import User, Token, authenticate_user, create_access_token, get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES
+from apitally.fastapi import ApitallyMiddleware
+
 
 api = FastAPI()
+api.add_middleware(
+    ApitallyMiddleware,
+    client_id="client_id_given_in_apitally_account",
+)
 
 class Priority(IntEnum):
     """
