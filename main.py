@@ -1,4 +1,3 @@
-# main.py
 from enum import IntEnum
 from typing import Optional
 from datetime import timedelta
@@ -14,31 +13,47 @@ api = FastAPI()
 
 
 class Priority(IntEnum):
+    """
+    Enumerating task priority.
+    """
     LOW = 1
     MEDIUM = 2
     HIGH = 3
 
 
 class taskBase(BaseModel):
+    """
+    Task model requiring name, description, priority.
+    """
     task_name: str        = Field(..., min_length=3, max_length= 256, description="Name of To-Do List")
     task_description: str = Field(..., description="Description of To-Do List")
     priority: Priority    = Field(default=Priority.LOW, description="Priority of Task")
 
 
 class Task(taskBase):
+    """
+    Base task model only requiring task_id.
+    """
     task_id: int = Field(..., description="Unique Identifier of Task")
 
 
 class taskCreate(taskBase):
+    """
+    Flexible model for POST endpoint.
+    """
     pass
 
 
 class taskUpdate(BaseModel):
+    """
+    Model for PUT with optional fields.
+    """
     task_name: Optional[str]        = Field(None, min_length=3, max_length= 256, description="Name of To-Do List")
     task_description: Optional[str] = Field(None, description="Description of To-Do List")
     priority: Optional[Priority]    = Field(None, description="Priority of Task")
 
 
+# mock task DB
 all_tasks = [
     Task(task_id=1, task_name="Health", task_description="get some sunlight", priority=Priority.HIGH),
     Task(task_id=2, task_name="Work", task_description="apply for jobs", priority=Priority.HIGH),
@@ -47,6 +62,7 @@ all_tasks = [
     Task(task_id=5, task_name="Food", task_description="get groceries", priority=Priority.LOW)
 ]
 
+
 # Authentication
 @api.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -54,6 +70,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     Endpoint for users to log in and obtain an access token.
     """
     user = authenticate_user(form_data.username, form_data.password)
+    
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -75,6 +92,7 @@ async def get_task(task_id: int, current_user: User = Depends(get_current_user))
     Retrieves a single task by its ID.
     """
     print(f"Authenticated user for get_task: {current_user.username}")
+    
     for task in all_tasks:
         if task.task_id == task_id:
             return task
@@ -99,6 +117,7 @@ async def create_task(task: taskCreate, current_user: User = Depends(get_current
     Creates a new task.
     """
     print(f"Authenticated user for create_task: {current_user.username}")
+    
     new_task_id = max(t.task_id for t in all_tasks) + 1 if all_tasks else 1
 
     new_task = Task(task_id = new_task_id,
@@ -118,6 +137,7 @@ async def update_task(task_id: int, updated_task: taskUpdate, current_user: User
     Updates an existing task by its ID.
     """
     print(f"Authenticated user for update_task: {current_user.username}")
+
     for task in all_tasks:
         if task.task_id == task_id:
             if updated_task.task_name is not None:
@@ -138,6 +158,7 @@ async def delete_task(task_id: int, current_user: User = Depends(get_current_use
     Deletes a task by its ID.
     """
     print(f"Authenticated user for delete_task: {current_user.username}")
+    
     for n, task in enumerate(all_tasks):
         if task.task_id == task_id:
             deleted_task = all_tasks.pop(n)
